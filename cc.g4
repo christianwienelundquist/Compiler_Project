@@ -1,8 +1,20 @@
 grammar cc;
 
-// grammatik  parser
-start   :
+// grammatik parser
+start   : hardware inputs outputs latches Reset EOF;
 
-exp: IDENT | INT | exp'+'exp | exp'*'exp | '('exp')' ;
-IDENT: [a-zA-Z][a-zA-Z0-9]*;
-INT : [0-9]+;
+hardware : IDENTIFIER;
+inputs : OSCILLATOR ;
+outputs : OSCILLATOR ;
+Reset   : FLOAT;
+latches : OSCILLATOR ;
+
+IDENTIFIER : [a-zA-Z] [a-zA-Z]* ;  // x17y
+OSCILLATOR : '/' OSCILLATOR ''';
+
+FLOAT      : [0-9]+ ('.' [0-9]+)? ;
+
+WHITESPACE : [ \t\n]+ -> skip;
+
+COMMENT : '//' ~[\n]* -> skip;
+LONGCOMMENT : '/' (~[] | ''~[/]) '*/' -> skip;
