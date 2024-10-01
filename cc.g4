@@ -1,20 +1,26 @@
 grammar cc;
 
-// grammatik parser
-start   : hardware inputs outputs latches Reset EOF;
+start   : hardware inputs outputs latches updates siminputs EOF;
 
-hardware : IDENTIFIER;
-inputs : OSCILLATOR ;
-outputs : OSCILLATOR ;
-Reset   : FLOAT;
-latches : OSCILLATOR ;
+// Grammar sections
+hardware : 'hardware:' IDENTIFIER;
+inputs : 'inputs:' IDENTIFIER;
+outputs : 'outputs:' IDENTIFIER;
+latches : 'latches:' IDENTIFIER;
+updates : 'updates:' update+;
+siminputs : 'siminputs:' siminput+;
 
-IDENTIFIER : [a-zA-Z] [a-zA-Z]* ;  // x17y
-OSCILLATOR : '/' OSCILLATOR ''';
+// Definitions for updates and siminputs
+update : exp '=' exp;
+siminput : IDENTIFIER '=' BINARY;
 
-FLOAT      : [0-9]+ ('.' [0-9]+)? ;
+// Expressions and identifiers
+exp : OSCILLATOR | IDENTIFIER '(' IDENTIFIER (',' IDENTIFIER)* ')';
+IDENTIFIER : [a-zA-Z]+ ;  
+OSCILLATOR : '/' IDENTIFIER '\''? ('/' IDENTIFIER)?;
 
+// Formating
+BINARY : [0-1]+;
 WHITESPACE : [ \t\n]+ -> skip;
-
 COMMENT : '//' ~[\n]* -> skip;
-LONGCOMMENT : '/' (~[] | ''~[/]) '*/' -> skip;
+LONGCOMMENT : '/*' .*? '*/' -> skip;
