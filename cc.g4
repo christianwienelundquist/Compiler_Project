@@ -1,22 +1,37 @@
 grammar cc;
 
-// grammatik parser
-start   : hardware inputs outputs latches Oscillator siminputs Reset EOF;
+// Main grammar structure
+start   : hardware inputs outputs latches def updates siminputs EOF;
 
-hardware : IDENTIFIER ;  
-inputs : IDENTIFIER ;    
-outputs : IDENTIFIER ;   
-latches : IDENTIFIER ;  
-siminputs : IDENTIFIER ; 
-Reset : IDENTIFIER ;     
-Oscillator : IDENTIFIER;
-    
-IDENTIFIER : [a-zA-Z] [a-zA-Z_0-9]* ;  // x17y
+// Grammar sections
+hardware : 'hardware:' IDENTIFIER;
+inputs : 'inputs:' IDENTIFIER;
+outputs : 'outputs:' IDENTIFIER;
+latches : 'latches:' IDENTIFIER;
+def : 'def:' func_def+; 
+updates : 'updates:' update+;
+siminputs : 'siminputs:' siminput+;
 
-FLOAT      : [0-9]+ ('.' [0-9]+)? ;
 
+// Definitions for function and updates
+func_def : IDENTIFIER '(' IDENTIFIER (',' IDENTIFIER)* ')' '=' logic_expr;
+update : IDENTIFIER '=' exp;
+siminput : IDENTIFIER '=' BINARY;
+
+
+// Expressions and function calls
+exp : func_call | OSCILLATOR;
+func_call : IDENTIFIER '(' exp (',' exp)* ')';
+logic_expr : OSCILLATOR ('*' OSCILLATOR)*; // Parses logic like /a * /b
+
+
+// Identifiers and oscillators
+IDENTIFIER : [a-zA-Z]+ ; /
+OSCILLATOR : '/'? IDENTIFIER '\''? ('/' IDENTIFIER)?;  // Allows '/' and negations
+
+
+// Binary input format for siminputs
+BINARY : [0-1]+;
 WHITESPACE : [ \t\n]+ -> skip;
-
 COMMENT : '//' ~[\n]* -> skip;
-LONGCOMMENT : '/*' (~[*] | '*'~[/])* '*/' -> skip;
-
+LONGCOMMENT : '/*' .*? '*/' -> skip;
