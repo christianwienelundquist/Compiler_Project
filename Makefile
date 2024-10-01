@@ -20,5 +20,5 @@ ccLexer.java:	cc.g4
 ccLexer.class:	ccLexer.java
 	javac -cp $(classpath) $(GENERATED)
 
-grun:	ccLexer.class TestFiles/01-hello-world.hw
-	$(grun) cc start -gui -tokens TestFiles/01-hello-world.hw
+grun:	ccLexer.class TestFiles/01b-hello-world-withdef.hw
+	$(grun) cc start -gui -tokens TestFiles/01b-hello-world-withdef.hw
