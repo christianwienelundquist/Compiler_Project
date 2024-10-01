@@ -15,7 +15,7 @@ siminputs : 'siminputs:' siminput+;
 
 // Definitions for function and updates
 func_def : IDENTIFIER '(' IDENTIFIER (',' IDENTIFIER)* ')' '=' logic_expr;
-update : OSCILLATOR|IDENTIFIER '='|'*'  |IDENTIFIER |logic_expr;
+update : OSCILLATOR|IDENTIFIER | '(' | '='| '*' | '+' | '-' | IDENTIFIER | ')'|logic_expr;
 siminput : IDENTIFIER '=' BINARY;
 
 
