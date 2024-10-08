@@ -8,27 +8,25 @@ hardware : 'hardware:' IDENTIFIER+;
 inputs : 'inputs:' IDENTIFIER+;
 outputs : 'outputs:' IDENTIFIER+;
 latches : 'latches:' IDENTIFIER+;
-def : 'def:' func_def+; 
+def : 'def:' exp+; 
 updates : 'updates:' update+;
 siminputs : 'siminputs:' siminput+;
 
 
 // Definitions for function and updates
-func_def : IDENTIFIER '(' IDENTIFIER (',' IDENTIFIER)* ')' '=' exp ;
-update : OSCILLATOR | IDENTIFIER | '(' | '=' | '*' | '+' | '-' | IDENTIFIER | OSCILLATOR | ')' | exp;
+update   : exp ('=' exp)?;
 siminput : IDENTIFIER '=' BINARY;
 
-exp : exp '+' exp         // Handles addition
-    | exp '-' exp         // Handles subtraction
-    | exp '*' exp         // Handles multiplication
-    | exp '/' exp         // Handles division
-    | '(' exp ')'         // Parenthesized expressions
-    |IDENTIFIER '(' (exp (',' exp)*)? ')'
-    | OSCILLATOR          // Oscillators as atomic expressions
-    | IDENTIFIER
-    | exp '/'  exp      // Identifiers as atomic expressions
-    | (OSCILLATOR | IDENTIFIER) (('+' | '*' | '/' )* (OSCILLATOR | IDENTIFIER))*;
-
+exp : exp '+' exp                                   #OR         // Logical OR expression
+    | exp '*' exp                                   #AND        // Logical AND expression
+    | '/' exp                                       #NOT        // Logical NOT expression
+    | '(' exp ')'                                   #Paren      // Parenthesized expression
+    | '=' exp                                       #Assign     // Assignment expression
+    | IDENTIFIER '(' (exp (',' exp)*)? ')'          #FunctionCall // Function call
+    | OSCILLATOR                                    #Oscillator  // Oscillators as atomic expressions
+    | IDENTIFIER                                    #Identifier  // Atomic identifier
+    | (OSCILLATOR | IDENTIFIER)                     #SeqOps     // Sequences of oscillators or identifiers
+    ;
 
 
 // Identifiers and oscillators
@@ -40,4 +38,4 @@ OSCILLATOR : '/'? IDENTIFIER '\''? ('/' IDENTIFIER)?;  // Allows '/' and negatio
 BINARY : [0-1]+;
 WHITESPACE : [ \n\t\r]+ -> skip; 
 COMMENT : '//' (~[\n])* '\n' -> skip; 
-LONGCOMMENT : '/*' .*? '*/' -> skip;
+LONGCOMMENT : '/' .? '*/' -> skip;
