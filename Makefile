@@ -8,17 +8,25 @@ classpath = '$(antlrjar):.'
 
 antlr4 = java -cp $(classpath) org.antlr.v4.Tool
 grun = java -cp $(classpath) org.antlr.v4.gui.TestRig
-SRCFILES = main.java
-GENERATED = ccListener.java ccBaseListener.java ccParser.java ccLexer.java
+SRCFILES = main.java AST.java Environment.java
+GENERATED = ccLexer.java ccParser.java progListener.java progBaseListener.java progParser.java progLexer.java progBaseVisitor.java progVisitor.java 
 
-all:	
-	make grun
+all: grun
 
-ccLexer.java:	cc.g4
+ccLexer.java ccParser.java: cc.g4
 	$(antlr4) cc.g4
 
-ccLexer.class:	ccLexer.java
-	javac -cp $(classpath) $(GENERATED)
+%.class: %.java
+	javac -cp $(classpath) $<
 
-grun:	ccLexer.class TestFiles/04-von-Neumann.hw
+grun: ccLexer.class ccParser.class TestFiles/04-von-Neumann.hw
 	$(grun) cc start -gui -tokens TestFiles/04-von-Neumann.hw
+
+main.class: $(GENERATED) $(SRCFILES)
+	javac -cp $(classpath) $(GENERATED) $(SRCFILES)
+
+run: main.class
+	java -cp $(classpath) main prog.txt
+
+clean:
+	rm -f $(GENERATED) *.class *.interp *.tokens

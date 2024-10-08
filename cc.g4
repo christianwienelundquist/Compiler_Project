@@ -14,15 +14,21 @@ siminputs : 'siminputs:' siminput+;
 
 
 // Definitions for function and updates
-func_def : IDENTIFIER '(' IDENTIFIER (',' IDENTIFIER)* ')' '=' logic_expr ;
-update : OSCILLATOR | IDENTIFIER | '(' | '=' | '*' | '+' | '-' | IDENTIFIER | OSCILLATOR | ')' | logic_expr;
+func_def : IDENTIFIER '(' IDENTIFIER (',' IDENTIFIER)* ')' '=' exp ;
+update : OSCILLATOR | IDENTIFIER | '(' | '=' | '*' | '+' | '-' | IDENTIFIER | OSCILLATOR | ')' | exp;
 siminput : IDENTIFIER '=' BINARY;
 
+exp : exp '+' exp         // Handles addition
+    | exp '-' exp         // Handles subtraction
+    | exp '*' exp         // Handles multiplication
+    | exp '/' exp         // Handles division
+    | '(' exp ')'         // Parenthesized expressions
+    |IDENTIFIER '(' (exp (',' exp)*)? ')'
+    | OSCILLATOR          // Oscillators as atomic expressions
+    | IDENTIFIER
+    | exp '/'  exp      // Identifiers as atomic expressions
+    | (OSCILLATOR | IDENTIFIER) (('+' | '*' | '/' )* (OSCILLATOR | IDENTIFIER))*;
 
-// Expressions and function calls
-logic_expr : term (('+' | '*' | '/' )* term)*;
-term : OSCILLATOR | func_call | IDENTIFIER; // Terms can be oscillators, function calls, or identifiers
-func_call : IDENTIFIER '(' logic_expr (',' logic_expr)* ')'; 
 
 
 // Identifiers and oscillators
