@@ -8,7 +8,7 @@ hardware : 'hardware:' IDENTIFIER+;
 inputs : 'inputs:' IDENTIFIER+;
 outputs : 'outputs:' IDENTIFIER+;
 latches : 'latches:' IDENTIFIER+;
-def : 'def:' exp+; 
+def : 'def:' func_def+; 
 updates : 'updates:' update+;
 siminputs : 'siminputs:' siminput+;
 
@@ -16,6 +16,7 @@ siminputs : 'siminputs:' siminput+;
 // Definitions for function and updates
 update   : exp ('=' exp)?;
 siminput : IDENTIFIER '=' BINARY;
+func_def : IDENTIFIER '(' IDENTIFIER (',' IDENTIFIER)* ')' '=' exp ;
 
 exp : exp '+' exp                                   #OR         // Logical OR expression
     | exp '*' exp                                   #AND        // Logical AND expression
@@ -25,8 +26,9 @@ exp : exp '+' exp                                   #OR         // Logical OR ex
     | IDENTIFIER '(' (exp (',' exp)*)? ')'          #FunctionCall // Function call
     | OSCILLATOR                                    #Oscillator  // Oscillators as atomic expressions
     | IDENTIFIER                                    #Identifier  // Atomic identifier
-    | (OSCILLATOR | IDENTIFIER)                     #SeqOps     // Sequences of oscillators or identifiers
+    | (OSCILLATOR | IDENTIFIER) (('+' | '*' | '/' )* (OSCILLATOR | IDENTIFIER))* #Funcdef     
     ;
+
 
 
 // Identifiers and oscillators
