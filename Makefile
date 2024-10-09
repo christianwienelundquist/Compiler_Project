@@ -19,14 +19,18 @@ ccLexer.java ccParser.java: cc.g4
 %.class: %.java
 	javac -cp $(classpath) $<
 
-grun: ccLexer.class ccParser.class TestFiles/04-von-Neumann.hw
-	$(grun) cc start -gui -tokens TestFiles/04-von-Neumann.hw
+grun: ccLexer.class ccParser.class TestFiles/01-hello-world.hw
+	$(grun) cc start -gui -tokens TestFiles/01-hello-world.hw
+
+
+main: 
+	javac main.java
 
 main.class: $(GENERATED) $(SRCFILES)
 	javac -cp $(classpath) $(GENERATED) $(SRCFILES)
 
 run: main.class
-	java -cp $(classpath) main prog.txt
+	java -cp $(classpath) main TestFiles/01-hello-world.hw
 
 clean:
 	rm -f $(GENERATED) *.class *.interp *.tokens
