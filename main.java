@@ -1,4 +1,3 @@
-import org.antlr.v4.*;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -18,26 +17,14 @@ public class main {
 	}
 	String filename=args[0];
 
-	// open the input file
 	CharStream input = CharStreams.fromFileName(filename);
-	    //new ANTLRFileStream (filename); // depricated
-	
-	// create a lexer/scanner
-	progLexer lex = new progLexer(input);
-	
-	// get the stream of tokens from the scanner
+	ccLexer lex = new ccLexer(input);
 	CommonTokenStream tokens = new CommonTokenStream(lex);
-	
-	// create a parser
-	progParser parser = new progParser(tokens);
-	
-	// and parse anything from the grammar for "start"
+	ccParser parser = new ccParser(tokens);
 	ParseTree parseTree = parser.start();
-
-	// Construct an interpreter and run it on the parse tree
-	Interpreter interpreter = new Interpreter();
-	Double result=interpreter.visit(parseTree);
-	System.out.println("The result is: "+result);
+	ASTMaker astmaker = new ASTMaker();
+	Program p=(Program)astmaker.visit(parseTree);
+	p.eval(new Environment());
     }
 }
 
@@ -54,95 +41,166 @@ updates : 'updates:' update+;
 siminputs : 'siminputs:' siminput+;
 */
 
-class VisitorCC extends AbstractParseTreeVisitor<Double> implements progVisitor<Double>{
-	public Double visitHardware(progParser.StartContext ctx){
-		
-	}
+// class ccVisitor extends AbstractParseTreeVisitor<Double> implements ccVisitor<Double>{
+// 	public Double visitHardware(ccParser.StartContext ctx){
+// 		System.out.println("Hardware");
+// 	}
 
-	public Double visitInputs(progParser.StartContext ctx){
+// 	public Double visitInputs(ccParser.StartContext ctx){
 		
-	}
+// 	}
 
-	public Double visitOutputs(progParser.StartContext ctx){
+// 	public Double visitOutputs(ccParser.StartContext ctx){
 		
-	}
+// 	}
 
-	public Double visitLatches(progParser.StartContext ctx){
+// 	public Double visitLatches(ccParser.StartContext ctx){
 		
-	}
+// 	}
 
-	public Double visitUpdate(progParser.StartContext ctx){
+// 	public Double visitUpdate(ccParser.StartContext ctx){
 		
-	}
+// 	}
 
-	public Double visitSimInputs(progParser.StartContext ctx){
+// 	public Double visitSimInputs(ccParser.StartContext ctx){
 		
-	}
-	public Double visitUpdates(progParser.StartContext ctx){
+// 	}
+// 	public Double visitUpdates(ccParser.StartContext ctx){
 		
-	}
-}
+// 	}
+// }
 
-class Interpreter extends AbstractParseTreeVisitor<Double>
-                  implements progVisitor<Double> {
-    // todo - Java will complain that "Interpreter" does not in fact
-    // implement "implVisitor" at the moment.
 
-	public Double visitStart(progParser.StartContext ctx){
+class ASTMaker extends AbstractParseTreeVisitor<AST>
+			implements ccVisitor<AST> {
+	public AST visitStart(ccParser.StartContext ctx){
+	List<Program> ps = new ArrayList<Program>();
+	for (ccParser.CmdContext s : ctx.cs )
+		ps.add((Program) visit(s));
+	return new Sequence(ps);
+	};
+	public AST visitSingle(ccParser.SingleContext ctx)
+	{
+	return visit(ctx.c);
+	};
+	public AST visitBlock(ccParser.BlockContext ctx){
+	List<Program> ps = new ArrayList<Program>();
+	for (ccParser.CmdContext s : ctx.cs )
+		ps.add((Program) visit(s));
+	return new Sequence(ps);
+	};
+	public AST visitAssign(ccParser.AssignContext ctx){
+	return new Assignment(ctx.x.getText(),(Exp) visit(ctx.e));
+	};
+	public AST visitWhile(ccParser.WhileContext ctx){
+	return new While((Condition) visit(ctx.c), (Program) visit(ctx.p));
+	};
+	public AST visitOutput(ccParser.OutputContext ctx){
+	return new Output((Exp) visit(ctx.e));
+	
+	};
+	public AST visitIf(ccParser.IfContext ctx){
+	return new If((Condition) visit(ctx.c),
+			(Program) visit(ctx.p1),
+			(Program) visit(ctx.p2));
+	};
+	public AST visitGreater(ccParser.GreaterContext ctx){
+	return new Greater((Exp) visit(ctx.e1), (Exp) visit(ctx.e2)); 
+	};
+	public AST visitEqual(ccParser.EqualContext ctx){
+	System.err.println("visitEqual: Implement me!");
+	System.exit(-1);
+	return null;
+	};
+	public AST visitUnequal(ccParser.UnequalContext ctx){
+	System.err.println("visitUnequal: Implement me!");
+	System.exit(-1);
+	return null;
+	};
+	public AST visitAdd(ccParser.AddContext ctx){
+	if (ctx.op.getText().equals("+"))
+		return new Addition((Exp) visit(ctx.e1),
+				(Exp) visit(ctx.e2));
+	else return new Subtraction((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
+	};
+	public AST visitMult(ccParser.MultContext ctx){
+	if (ctx.op.getText().equals("*"))
+		return new Multiplication((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
+	else return new Division((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
+	};
+	public AST visitVar(ccParser.VarContext ctx){
+	return new Variable(ctx.x.getText());
+	};
+	public AST visitConst(ccParser.ConstContext ctx){
+	return new Constant(Double.valueOf(ctx.f.getText()));
+	};
+	public AST visitParen(ccParser.ParenContext ctx){
+	return visit(ctx.e);
+	};
+
+			   }
+
+
+// class Interpreter extends AbstractParseTreeVisitor<Double>
+//                   implements ccVisitor<Double> {
+//     // todo - Java will complain that "Interpreter" does not in fact
+//     // implement "implVisitor" at the moment.
+
+// 	public Double visitStart(ccParser.StartContext ctx){
 		
-		String htmlstring = "<!DOCTYPE html>
-						<html><head><title>TITLEOFTHEPAGE</title>
-						<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>
-						<script type=\"text/javascript\" id=\"MathJax-script\"
-						async
-						src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js\">
-						</script></head><body>
-						THEMAINTEXT
-						</body></html>";
+// 		String htmlstring = "<!DOCTYPE html>
+// 						<html><head><title>TITLEOFTHEPAGE</title>
+// 						<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>
+// 						<script type=\"text/javascript\" id=\"MathJax-script\"
+// 						async
+// 						src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js\">
+// 						</script></head><body>
+// 						THEMAINTEXT
+// 						</body></html>";
 		
 		
-		System.out.println(htmlstring);
-	    return visit(ctx.e);
-	}
-	public Double visitVariable(progParser.VariableContext ctx){
-	    System.err.println("Variables are not yet supported.\n");
-	    System.exit(-1);
-	    return null; }
-	public Double visitAddSub(progParser.AddSubContext ctx){
-	    // e1=exp op=('+'|'-') e2=exp
-	    System.out.println("Addition/Subtraction");
-	    Double d1=visit(ctx.e1);
-	    Double d2=visit(ctx.e2);
-	    if (ctx.op.getText().equals("+")){
-		System.out.println("Add "+d1+" + "+d2+" = "+(d1+d2));
-		return d1+d2;
-	    }
-	    else{
-		System.out.println("Sub "+d1+" - "+d2+" = "+(d1-d2));
-		return d1-d2;
-	    }
-	}
-	public Double visitConstant(progParser.ConstantContext ctx){
-	    String s=ctx.f.getText();
-	    System.out.println("Constant "+ s);
-	    return Double.valueOf(s);
-	}
-	public Double visitParen(progParser.ParenContext ctx){ return visit(ctx.e); }
-	public Double visitMultDiv(progParser.MultDivContext ctx){
-	    System.out.println("Mult/Div");
-	    Double d1=visit(ctx.e1);
-	    Double d2=visit(ctx.e2);
-	    if (ctx.op.getText().equals("*")){
-		System.out.println("Mult "+ d1 +" * "+ d2 +" = "+(d1 * d2));
-		return d1*d2;
-	    }
-	    else{
-		System.out.println("Div "+ d1 +" / "+ d2 +" = "+(d1 / d2));				
-		return d1/d2;	
-	    }
+// 		System.out.println(htmlstring);
+// 	    return visit(ctx.e);
+// 	}
+// 	public Double visitVariable(ccParser.VariableContext ctx){
+// 	    System.err.println("Variables are not yet supported.\n");
+// 	    System.exit(-1);
+// 	    return null; }
+// 	public Double visitAddSub(ccParser.AddSubContext ctx){
+// 	    // e1=exp op=('+'|'-') e2=exp
+// 	    System.out.println("Addition/Subtraction");
+// 	    Double d1=visit(ctx.e1);
+// 	    Double d2=visit(ctx.e2);
+// 	    if (ctx.op.getText().equals("+")){
+// 		System.out.println("Add "+d1+" + "+d2+" = "+(d1+d2));
+// 		return d1+d2;
+// 	    }
+// 	    else{
+// 		System.out.println("Sub "+d1+" - "+d2+" = "+(d1-d2));
+// 		return d1-d2;
+// 	    }
+// 	}
+// 	public Double visitConstant(ccParser.ConstantContext ctx){
+// 	    String s=ctx.f.getText();
+// 	    System.out.println("Constant "+ s);
+// 	    return Double.valueOf(s);
+// 	}
+// 	public Double visitParen(ccParser.ParenContext ctx){ return visit(ctx.e); }
+// 	public Double visitMultDiv(ccParser.MultDivContext ctx){
+// 	    System.out.println("Mult/Div");
+// 	    Double d1=visit(ctx.e1);
+// 	    Double d2=visit(ctx.e2);
+// 	    if (ctx.op.getText().equals("*")){
+// 		System.out.println("Mult "+ d1 +" * "+ d2 +" = "+(d1 * d2));
+// 		return d1*d2;
+// 	    }
+// 	    else{
+// 		System.out.println("Div "+ d1 +" / "+ d2 +" = "+(d1 / d2));				
+// 		return d1/d2;	
+// 	    }
     
-	}
+// 	}
 
 
-}
+// }
 

@@ -1,6 +1,5 @@
 .vscode/
 
-*.java
 # not main.java
 !main.java
 *.class
