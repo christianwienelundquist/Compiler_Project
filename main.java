@@ -47,7 +47,6 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 	public AST visitStart(ccParser.StartContext ctx){
 		List<String> ps = new ArrayList<String>();
 		ps.add((String) visit(ctx.start));
-
 		return new Start(ps.ToHTML());
 	};
 	
@@ -70,9 +69,6 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 		for (ccParser.OutputsContext s : ctx.otp)
 			ps.add((String) visit(s));
 		return new Output(ps);
-		
-		// return visit(ctx.otp);
-		// return visit(ctx.otp);
 	}
 
 	public AST visitLatches(ccParser.LatchesContext ctx){
@@ -95,12 +91,22 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 		for (ccParser.UpdatesContext s : ctx.upd)
 			ps.add((String) visit(s));
 		return new latches(ps);
-		// return visit(ctx.upd);
 	}
 
-	public AST visitSiminput(ccParser.SiminputContext ctx){
+	public AST visitSiminputs(ccParser.SiminputsContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.SiminputsContext s : ctx.simip)
+			ps.add((String) visit(s));
+		return new latches(ps);
+		// return visit(ctx.simip);
+	}
+
+		public AST visitSiminput(ccParser.SiminputContext ctx){
 		List<String> ps = new ArrayList<String>();
 		for (ccParser.SiminputContext s : ctx.simip)
+			ps.add((String) visit(s));
+
+		for (ccParser.SiminputContext s : ctx.bir)
 			ps.add((String) visit(s));
 		return new latches(ps);
 		// return visit(ctx.simip);
@@ -111,7 +117,6 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 		for (ccParser.UpdatesContext s : ctx.upd)
 			ps.add((String) visit(s));
 		return new latches(ps);
-		// return visit(ctx.upd);
 	}
 
 
