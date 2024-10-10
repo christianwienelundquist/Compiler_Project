@@ -8,7 +8,7 @@ classpath = '$(antlrjar):.'
 
 antlr4 = java -cp $(classpath) org.antlr.v4.Tool
 grun = java -cp $(classpath) org.antlr.v4.gui.TestRig
-SRCFILES = main.java AST.java Environment.java
+SRCFILES = main.java AST.java
 GENERATED = ccLexer.java ccParser.java ccListener.java ccBaseListener.java ccParser.java ccVisitor.java ccBaseVisitor.java
 
 all: grun

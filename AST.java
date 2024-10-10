@@ -8,122 +8,115 @@ import java.util.List;
 
 public abstract class AST{};
 
-abstract class Program extends AST{
-    abstract public void eval(Environment env);
+abstract class HTMLElementsStringss extends AST{
+    public abstract String ToHTML();
 }
 
-class Sequence extends Program{
-    List<Program> ps;
-    Sequence(List<Program> ps){this.ps=ps;}
-    public void eval(Environment env){
-	for(Program p:ps) p.eval(env);
-    };
-}
 
-class Assignment extends Program{
-    String varname;
-    Exp e;
-    Assignment(String varname, Exp e){ this.varname=varname; this.e=e;}
-    public void eval(Environment env){
-	Double d=e.eval(env);
-	env.setVariable(varname,d);
-    };
-}
+// class Start extends HTMLElementsStringss{
+//     List<HTMLElementsStringss> ps;
+//     Start(List<HTMLElementsStringss> ps){this.ps=ps;}
+//     public String ToHTML(){
+//         String hej;
+//         for(HTMLElementsStringss p:ps){
+//             hej.concat(hej,p.ToHTML());
+//         }
+//     }
+// }
 
-class While extends Program{
-    Condition c;
-    Program p;
-    While(Condition c, Program p){this.c=c; this.p=p;}
-    public void eval(Environment env){
-	while(c.eval(env)){
-	    p.eval(env);
-	}
-	/*
-	  Boolean b=c.eval();
-	  if (b){ p.eval(); this.eval();}
 
-	 */
-    };
-}
-
-class If extends Program{
-    Condition c;
-    Program p1,p2;
-    If(Condition c, Program p1, Program p2){
-	this.c=c; this.p1=p1; this.p2=p2;
-    }
-    public void eval(Environment env){
-	if(c.eval(env)) p1.eval(env);
-	else p2.eval(env);
-    };
-}
-
-class Output extends Program{
-    Exp e;
-    Output(Exp e){ this.e=e;}
-    public void eval(Environment env){
-	System.out.println(e.eval(env));
-    };
-}
-
-abstract class Condition extends AST{
-    abstract public Boolean eval(Environment env);
-};
-
-class Greater extends Condition{
-    Exp e1,e2;
-    Greater(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}
-    public Boolean eval(Environment env){
-	return e1.eval(env)>e2.eval(env);
+class Hardware extends HTMLElementsStringss{
+    List<String> ps;
+    Hardware(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
     }
 }
+
+
+class Input extends HTMLElementsStringss{
+    List<String> ps;
+    Input(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
+class Output extends HTMLElementsStringss{
+    List<String> ps;
+    Output(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
+class latches extends HTMLElementsStringss{
+    List<String> ps;
+    latches(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
+class def extends HTMLElementsStringss{
+    List<String> ps;
+    def(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
+class updates extends HTMLElementsStringss{
+    List<String> ps;
+    updates(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
+class siminputs extends HTMLElementsStringss{
+    List<String> ps;
+    siminputs(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
+
+
+
+
+
+
+
+
 
 abstract class Exp extends AST{
-    abstract public Double eval(Environment env);
+    public abstract String toLatex();
 }
 
-class Addition extends Exp{
+class OR extends Exp{
     Exp e1, e2;
-    Addition(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}    
-    public Double eval(Environment env){
-	return e1.eval(env)+e2.eval(env);
-    };
+    OR(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}  
+    public String toLatex(){
+        return "("+ e1.toLatex() + " \\vee "+ e2.toLatex() +")" ;
+    }  
 }
 
-class Subtraction extends Exp{
+class And extends Exp{
     Exp e1, e2;
-    Subtraction(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}    
-    public Double eval(Environment env){
-	return e1.eval(env)-e2.eval(env);
-    };
-}
-class Multiplication extends Exp{
-    Exp e1, e2;
-    Multiplication(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}
-    public Double eval(Environment env){
-	return e1.eval(env)*e2.eval(env);
-    };
-}
-class Division extends Exp{
-    Exp e1, e2;
-    Division(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}
-    public Double eval(Environment env){
-	return e1.eval(env)/e2.eval(env);
-    };
+    And(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}
+    public String toLatex(){
+        return "("+ e1.toLatex() + " \\wedge "+ e2.toLatex() +")" ;
+    } 
 }
 
-class Constant extends Exp{
-    public Double d;
-    Constant(Double d){ this.d=d;}
-    public Double eval(Environment env){
-	return d;
-    };
-};
+class Not extends Exp{
+    Exp e1;
+    Not(Exp e1){this.e1=e1;}
+    public String toLatex(){
+        return "(\\neg"+ e1.toLatex() +")" ;
+    } 
+}
 
-class Variable extends Exp{
-    public String varname;
-    Variable(String varname){this.varname=varname;}
-    public Double eval(Environment env){
-	return env.getVariable(varname);
-    };
-};
+

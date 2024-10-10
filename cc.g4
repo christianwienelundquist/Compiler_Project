@@ -1,39 +1,36 @@
 grammar cc;
 
 // Main grammar structure
-start   : hardware inputs outputs latches (def+)? updates siminputs EOF;
+start   : hardwar=hardware input=inputs output=outputs latche=latches (definisio=def+)? updat=updates siminpu=siminputs EO=EOF;
 
 // Grammar sections
-hardware : hw+= 'hardware:' IDENTIFIER+;
-inputs : inp+='inputs:' IDENTIFIER+;
-outputs : otp+='outputs:' IDENTIFIER+;
-latches : lhes+='latches:' IDENTIFIER+;
-def : df+='def:' func_def+; 
-updates : upd+='updates:' update+;
-siminputs : simip+='siminputs:' siminput+;
-
-
+hardware :'hardware:'  hw+=IDENTIFIER+;
+inputs : 'inputs:' inp+=IDENTIFIER+;
+outputs : 'outputs:' otp+=IDENTIFIER+;
+latches : 'latches:' lhes+=IDENTIFIER+;
+def : 'def:' df=func_def; 
+updates : 'updates:' upd+=update+;
+siminputs : 'siminputs:' simip+=siminput+;
 // Definitions for function and updates
-update   : exp ('=' exp)?;
-siminput : IDENTIFIER '=' BINARY;
-func_def : IDENTIFIER '(' IDENTIFIER (',' IDENTIFIER)* ')' '=' exp ;
+update   : upda=IDENTIFIER '=' e=exp;
+siminput : simi=IDENTIFIER '=' bir=BINARY;
+func_def : fucd=IDENTIFIER '(' parms+=IDENTIFIER (',' parms+=IDENTIFIER)* ')' '=' fucd4=exp ;
 
-exp : exp '+' exp                                   #OR         // Logical OR expression
-    | exp '*' exp                                   #AND        // Logical AND expression
-    | '/' exp                                       #NOT        // Logical NOT expression
-    | '(' exp ')'                                   #Paren      // Parenthesized expression
-    | '=' exp                                       #Assign     // Assignment expression
-    | IDENTIFIER '(' (exp (',' exp)*)? ')'          #FunctionCall // Function call
-    | OSCILLATOR                                    #Oscillator  // Oscillators as atomic expressions
-    | IDENTIFIER                                    #Identifier  // Atomic identifier
-    | (OSCILLATOR | IDENTIFIER) (('+' | '*' | '/' )* (OSCILLATOR | IDENTIFIER))* #Funcdef     
+
+
+exp : '/' e1=exp           #NOT           // Logical OR expression
+    | e1=exp '*' e2=exp    #AND                           // Logical AND expression
+    | e1=exp '+' e2=exp    #OR                          // Logical NOT expression
+    | '(' e1=exp ')'                                   #Paren      // Parenthesized expression
+    | '=' e1=exp                                       #Assign     // Assignment expression
+    | e1=IDENTIFIER '(' (e2+=exp (',' e2+=exp)*)? ')'          #FunctionCall // Function call
+    | e1=IDENTIFIER                                    #Identifier  // Atomic identifier   
     ;
 
 
 
 // Identifiers and oscillators
 IDENTIFIER : [a-zA-Z]+[0-9]? ; 
-OSCILLATOR : '/'? IDENTIFIER '\''? ('/' IDENTIFIER)?;  // Allows '/' and negations
 
 
 // Binary input format for siminputs
