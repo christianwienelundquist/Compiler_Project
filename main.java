@@ -22,7 +22,7 @@ public class main {
 	CommonTokenStream tokens = new CommonTokenStream(lex);
 	ccParser parser = new ccParser(tokens);
 	ParseTree parseTree = parser.start();
-	AST astmaker = new AST();
+	ASTMaker astmaker = new ASTMaker();
 	Program p=(Program)astmaker.visit(parseTree);
 	p.eval(new Environment());
     }
@@ -71,74 +71,87 @@ siminputs : 'siminputs:' siminput+;
 // }
 
 
-class ASTMaker extends AbstractParseTreeVisitor<AST>
-			implements ccVisitor<AST> {
+class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 	public AST visitStart(ccParser.StartContext ctx){
-	List<Program> ps = new ArrayList<Program>();
-	for (ccParser.CmdContext s : ctx.cs )
-		ps.add((Program) visit(s));
-	return new Sequence(ps);
+		return visit(ctx.c);
 	};
-	public AST visitSingle(ccParser.SingleContext ctx)
-	{
-	return visit(ctx.c);
-	};
-	public AST visitBlock(ccParser.BlockContext ctx){
-	List<Program> ps = new ArrayList<Program>();
-	for (ccParser.CmdContext s : ctx.cs )
-		ps.add((Program) visit(s));
-	return new Sequence(ps);
-	};
-	public AST visitAssign(ccParser.AssignContext ctx){
-	return new Assignment(ctx.x.getText(),(Exp) visit(ctx.e));
-	};
-	public AST visitWhile(ccParser.WhileContext ctx){
-	return new While((Condition) visit(ctx.c), (Program) visit(ctx.p));
-	};
-	public AST visitOutput(ccParser.OutputContext ctx){
-	return new Output((Exp) visit(ctx.e));
 	
-	};
-	public AST visitIf(ccParser.IfContext ctx){
-	return new If((Condition) visit(ctx.c),
-			(Program) visit(ctx.p1),
-			(Program) visit(ctx.p2));
-	};
-	public AST visitGreater(ccParser.GreaterContext ctx){
-	return new Greater((Exp) visit(ctx.e1), (Exp) visit(ctx.e2)); 
-	};
-	public AST visitEqual(ccParser.EqualContext ctx){
-	System.err.println("visitEqual: Implement me!");
-	System.exit(-1);
-	return null;
-	};
-	public AST visitUnequal(ccParser.UnequalContext ctx){
-	System.err.println("visitUnequal: Implement me!");
-	System.exit(-1);
-	return null;
-	};
-	public AST visitAdd(ccParser.AddContext ctx){
-	if (ctx.op.getText().equals("+"))
-		return new Addition((Exp) visit(ctx.e1),
-				(Exp) visit(ctx.e2));
-	else return new Subtraction((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
-	};
-	public AST visitMult(ccParser.MultContext ctx){
-	if (ctx.op.getText().equals("*"))
-		return new Multiplication((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
-	else return new Division((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
-	};
-	public AST visitVar(ccParser.VarContext ctx){
-	return new Variable(ctx.x.getText());
-	};
-	public AST visitConst(ccParser.ConstContext ctx){
-	return new Constant(Double.valueOf(ctx.f.getText()));
-	};
-	public AST visitParen(ccParser.ParenContext ctx){
-	return visit(ctx.e);
+	public AST visitHardware(ccParser.HardwareContext ctx){
+		return visit(ctx.c);
 	};
 
-			   }
+	public AST visitInputs(ccParser.InputsContext ctx){
+		return visit(ctx.c);
+	} 
+
+	public AST visitOutputs(ccParser.OutputsContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitLatches(ccParser.LatchesContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitDef(ccParser.DefContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitUpdates(ccParser.UpdatesContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitSiminputs(ccParser.SiminputsContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitUpdate(ccParser.UpdateContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitSiminput(ccParser.SiminputContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitFunc_def(ccParser.Func_defContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitNot(ccParser.NOTContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST vissitIndentifier(ccParser.IdentifierContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitOr(ccParser.OrContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitOscillator(ccParser.OscillatorContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitFuncdef(ccParser.FuncdefContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitAND(ccParser.AndContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitAssign(ccParser.AssignContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitFunctionCall(ccParser.FunctionCallContext ctx){
+		return visit(ctx.c);
+	}
+
+	public AST visitParen(ccParser.ParenContext ctx){
+		return visit(ctx.c);
+	}
+}
 
 
 // class Interpreter extends AbstractParseTreeVisitor<Double>

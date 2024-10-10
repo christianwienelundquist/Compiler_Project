@@ -31,3 +31,4 @@ run:	main.class
 
 clean:
 	rm -f $(GENERATED) *.class *.interp *.tokens
+	clear
