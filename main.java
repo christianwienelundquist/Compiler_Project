@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.CharStreams;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class main {
     public static void main(String[] args) throws IOException{
@@ -24,6 +25,8 @@ public class main {
 	ParseTree parseTree = parser.start();
 	ASTMaker astmaker = new ASTMaker();
 	HTMLElementsStringss p=(HTMLElementsStringss)astmaker.visit(parseTree);
+
+	System.out.println(p);
     }
 }
 
@@ -47,7 +50,7 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 	public AST visitStart(ccParser.StartContext ctx){
 		List<String> ps = new ArrayList<String>();
 		ps.add(visit(ctx.hardwar));
-		return new Start(ps.ToHTML());
+		return new Start(ps);
 	};
 	
 	public AST visitHardware(ccParser.HardwareContext ctx){
