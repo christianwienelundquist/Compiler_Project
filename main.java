@@ -41,34 +41,7 @@ updates : 'updates:' update+;
 siminputs : 'siminputs:' siminput+;
 */
 
-// class ccVisitor extends AbstractParseTreeVisitor<Double> implements ccVisitor<Double>{
-// 	public Double visitHardware(ccParser.StartContext ctx){
-// 		System.out.println("Hardware");
-// 	}
 
-// 	public Double visitInputs(ccParser.StartContext ctx){
-		
-// 	}
-
-// 	public Double visitOutputs(ccParser.StartContext ctx){
-		
-// 	}
-
-// 	public Double visitLatches(ccParser.StartContext ctx){
-		
-// 	}
-
-// 	public Double visitUpdate(ccParser.StartContext ctx){
-		
-// 	}
-
-// 	public Double visitSimInputs(ccParser.StartContext ctx){
-		
-// 	}
-// 	public Double visitUpdates(ccParser.StartContext ctx){
-		
-// 	}
-// }
 
 
 class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
@@ -77,7 +50,10 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 	};
 	
 	public AST visitHardware(ccParser.HardwareContext ctx){
-		return visit(ctx.c);
+		List<Program> ps = new ArrayList<Program>();
+		for (ccParser.HardwareContext s : ctx.hw)
+			ps.add((Program) visit(s));
+		return new Sequence(ps);
 	};
 
 	public AST visitInputs(ccParser.InputsContext ctx){
@@ -116,15 +92,15 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 		return visit(ctx.c);
 	}
 
-	public AST visitNot(ccParser.NOTContext ctx){
+	public AST visitNOT(ccParser.NOTContext ctx){
 		return visit(ctx.c);
 	}
 
-	public AST vissitIndentifier(ccParser.IdentifierContext ctx){
+	public AST visitIdentifier(ccParser.IdentifierContext ctx){
 		return visit(ctx.c);
 	}
 
-	public AST visitOr(ccParser.OrContext ctx){
+	public AST visitOR(ccParser.ORContext ctx){
 		return visit(ctx.c);
 	}
 
@@ -136,7 +112,7 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 		return visit(ctx.c);
 	}
 
-	public AST visitAND(ccParser.AndContext ctx){
+	public AST visitAND(ccParser.ANDContext ctx){
 		return visit(ctx.c);
 	}
 

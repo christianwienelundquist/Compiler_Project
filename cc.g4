@@ -4,13 +4,13 @@ grammar cc;
 start   : hardware inputs outputs latches (def+)? updates siminputs EOF;
 
 // Grammar sections
-hardware : 'hardware:' IDENTIFIER+;
-inputs : 'inputs:' IDENTIFIER+;
-outputs : 'outputs:' IDENTIFIER+;
-latches : 'latches:' IDENTIFIER+;
-def : 'def:' func_def+; 
-updates : 'updates:' update+;
-siminputs : 'siminputs:' siminput+;
+hardware : hw+= 'hardware:' IDENTIFIER+;
+inputs : inp+='inputs:' IDENTIFIER+;
+outputs : otp+='outputs:' IDENTIFIER+;
+latches : lhes+='latches:' IDENTIFIER+;
+def : df+='def:' func_def+; 
+updates : upd+='updates:' update+;
+siminputs : simip+='siminputs:' siminput+;
 
 
 // Definitions for function and updates
