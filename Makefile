@@ -14,7 +14,7 @@ GENERATED = ccLexer.java ccParser.java ccListener.java ccBaseListener.java ccPar
 all: grun
 
 ccLexer.java ccParser.java: cc.g4
-	$(antlr4) cc.g4
+	$(antlr4) -visitor cc.g4
 
 %.class: %.java
 	javac -cp $(classpath) $<

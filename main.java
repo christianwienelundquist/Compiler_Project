@@ -22,7 +22,7 @@ public class main {
 	CommonTokenStream tokens = new CommonTokenStream(lex);
 	ccParser parser = new ccParser(tokens);
 	ParseTree parseTree = parser.start();
-	ASTMaker astmaker = new ASTMaker();
+	AST astmaker = new AST();
 	Program p=(Program)astmaker.visit(parseTree);
 	p.eval(new Environment());
     }
