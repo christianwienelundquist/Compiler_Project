@@ -13,16 +13,16 @@ abstract class HTMLElementsStringss extends AST{
 }
 
 
-// class Start extends HTMLElementsStringss{
-//     List<HTMLElementsStringss> ps;
-//     Start(List<HTMLElementsStringss> ps){this.ps=ps;}
-//     public String ToHTML(){
-//         String hej;
-//         for(HTMLElementsStringss p:ps){
-//             hej.concat(hej,p.ToHTML());
-//         }
-//     }
-// }
+class Start extends HTMLElementsStringss{
+    List<HTMLElementsStringss> ps;
+    Start(List<HTMLElementsStringss> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.builder sb = new StringBuilder();
+        for (HTMLElementsStringss p : ps){
+            sb.append(p.ToHTML());
+        }
+    }
+}
 
 
 class Hardware extends HTMLElementsStringss{
@@ -82,6 +82,30 @@ class siminputs extends HTMLElementsStringss{
     }
 }
 
+class update extends HTMLElementsStringss{
+    List<String> ps;
+    update(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
+class siminput extends HTMLElementsStringss{
+    List<String> ps;
+    siminput(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
+class func_def extends HTMLElementsStringss{
+    List<String> ps;
+    func_def(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+}
+
 
 
 
@@ -119,4 +143,40 @@ class Not extends Exp{
     } 
 }
 
+class Paren extends Exp{
+    Exp e1;
+    Paren(Exp e1){this.e1=e1;}
+    public String toLatex(){
+        return "("+ e1.toLatex() +")" ;
+    } 
+}
+
+class Assign extends Exp{
+    Exp e1;
+    Assign(Exp e1){this.e1=e1;}
+    public String toLatex(){
+        return "="+ e1.toLatex() ;
+    } 
+}
+
+class FunctionCall extends Exp{
+    Exp e1;
+    List<String> ps;
+    FunctionCall(List<String> ps){this.ps=ps;}
+    public String ToHTML(){
+        String.join("\n",ps);
+    }
+    FunctionCall(Exp e1){this.e1=e1;}
+    public String toLatex(){
+        return "(" + e1.toLatex() +"(" + ps +", "+")" ;
+    } 
+}
+
+class Identifier extends Exp{
+    Exp e1;
+    Identifier(Exp e1){this.e1=e1;}
+    public String toLatex(){
+        return "("+ e1.toLatex() +")" ;
+    } 
+}
 

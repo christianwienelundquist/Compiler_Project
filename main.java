@@ -46,9 +46,9 @@ siminputs : 'siminputs:' siminput+;
 class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 	public AST visitStart(ccParser.StartContext ctx){
 		List<String> ps = new ArrayList<String>();
-		ps.add((String) visit(ctx.hardwar));
+		ps.add((String) visit(ctx.start));
 
-		return new Start(ps);
+		return new Start(ps.ToHTML());
 	};
 	
 	public AST visitHardware(ccParser.HardwareContext ctx){
@@ -98,21 +98,25 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 		// return visit(ctx.upd);
 	}
 
-	public AST visitSiminputs(ccParser.SiminputsContext ctx){
+	public AST visitSiminput(ccParser.SiminputContext ctx){
 		List<String> ps = new ArrayList<String>();
-		for (ccParser.SiminputsContext s : ctx.simip)
+		for (ccParser.SiminputContext s : ctx.simip)
 			ps.add((String) visit(s));
 		return new latches(ps);
 		// return visit(ctx.simip);
 	}
 
 	public AST visitUpdate(ccParser.UpdateContext ctx){
-		return new Update((Exp) visit(ctx.e1),(Exp) visit(ctx.e2));
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.UpdatesContext s : ctx.upd)
+			ps.add((String) visit(s));
+		return new latches(ps);
+		// return visit(ctx.upd);
 	}
 
-	public AST visitSiminput(ccParser.SiminputContext ctx){
-		return visit(ctx.c);
-	}
+
+
+
 
 	public AST visitFunc_def(ccParser.Func_defContext ctx){
 		return visit(ctx.c);
@@ -125,25 +129,18 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 	}
 
 
-	public AST visitOscillator(ccParser.OscillatorContext ctx){
-		return visit(ctx.c);
-	}
-
-	public AST visitFuncdef(ccParser.FuncdefContext ctx){
-		return visit(ctx.c);
-	}
 
 
 	public AST visitAssign(ccParser.AssignContext ctx){
-		return visit(ctx.c);
+		return new Assign((Exp) visit(ctx.e1));
 	}
 
 	public AST visitFunctionCall(ccParser.FunctionCallContext ctx){
-		return visit(ctx.c);
+		return new FunctionCall((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
 	}
 
 	public AST visitParen(ccParser.ParenContext ctx){
-		return visit(ctx.c);
+		return new Assign((Exp) visit(ctx.e1));
 	}
 
 	
