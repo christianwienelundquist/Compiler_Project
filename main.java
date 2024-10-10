@@ -43,130 +43,130 @@ siminputs : 'siminputs:' siminput+;
 
 
 
-// class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
-// 	public AST visitStart(ccParser.StartContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		ps.add(visit(ctx.hardwar));
-// 		return new Start(ps.ToHTML());
-// 	};
+class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
+	public AST visitStart(ccParser.StartContext ctx){
+		List<String> ps = new ArrayList<String>();
+		ps.add(visit(ctx.hardwar));
+		return new Start(ps.ToHTML());
+	};
 	
-// 	public AST visitHardware(ccParser.HardwareContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.HardwareContext s : ctx.hw)
-// 			ps.add((String) visit(s));
-// 		return new Hardware(ps);
-// 	};
+	public AST visitHardware(ccParser.HardwareContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.HardwareContext s : ctx.hw)
+			ps.add((String) visit(s));
+		return new Hardware(ps);
+	};
 
-// 	public AST visitInputs(ccParser.InputsContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.InputsContext s : ctx.inp)
-// 			ps.add((String) visit(s));
-// 		return new Input(ps);
-// 	} 
+	public AST visitInputs(ccParser.InputsContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.InputsContext s : ctx.inp)
+			ps.add((String) visit(s));
+		return new Input(ps);
+	} 
 
-// 	public AST visitOutputs(ccParser.OutputsContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.OutputsContext s : ctx.otp)
-// 			ps.add((String) visit(s));
-// 		return new Output(ps);
-// 	}
+	public AST visitOutputs(ccParser.OutputsContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.OutputsContext s : ctx.otp)
+			ps.add((String) visit(s));
+		return new Output(ps);
+	}
 
-// 	public AST visitLatches(ccParser.LatchesContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.LatchesContext s : ctx.lhes)
-// 			ps.add((String) visit(s));
-// 		return new latches(ps);
-// 	}
+	public AST visitLatches(ccParser.LatchesContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.LatchesContext s : ctx.lhes)
+			ps.add((String) visit(s));
+		return new latches(ps);
+	}
 
-// 	public AST visitDef(ccParser.DefContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.DefContext s : ctx.df)
-// 			ps.add((String) visit(s));
-// 		return new latches(ps);
-// 		// return visit(ctx.df);
-// 	}
+	public AST visitDef(ccParser.DefContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.DefContext s : ctx.df)
+			ps.add((String) visit(s));
+		return new latches(ps);
+		// return visit(ctx.df);
+	}
 
-// 	public AST visitUpdates(ccParser.UpdatesContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.UpdatesContext s : ctx.upd)
-// 			ps.add((String) visit(s));
-// 		return new latches(ps);
-// 	}
+	public AST visitUpdates(ccParser.UpdatesContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.UpdatesContext s : ctx.upd)
+			ps.add((String) visit(s));
+		return new latches(ps);
+	}
 
-// 	public AST visitSiminputs(ccParser.SiminputsContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.SiminputsContext s : ctx.simip)
-// 			ps.add((String) visit(s));
-// 		return new latches(ps);
-// 		// return visit(ctx.simip);
-// 	}
+	public AST visitSiminputs(ccParser.SiminputsContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.SiminputsContext s : ctx.simip)
+			ps.add((String) visit(s));
+		return new latches(ps);
+		// return visit(ctx.simip);
+	}
 
-// 		public AST visitSiminput(ccParser.SiminputContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.SiminputContext s : ctx.simip)
-// 			ps.add((String) visit(s));
+		public AST visitSiminput(ccParser.SiminputContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.SiminputContext s : ctx.simip)
+			ps.add((String) visit(s));
 
-// 		for (ccParser.SiminputContext s : ctx.bir)
-// 			ps.add((String) visit(s));
-// 		return new latches(ps);
-// 		// return visit(ctx.simip);
-// 	}
+		for (ccParser.SiminputContext s : ctx.bir)
+			ps.add((String) visit(s));
+		return new latches(ps);
+		// return visit(ctx.simip);
+	}
 
-// 	public AST visitUpdate(ccParser.UpdateContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.UpdatesContext s : ctx.upd)
-// 			ps.add((String) visit(s));
-// 		return new latches(ps);
-// 	}
-
-
-
-
-
-// 	public AST visitFunc_def(ccParser.Func_defContext ctx){
-// 		List<String> ps = new ArrayList<String>();
-// 		for (ccParser.Func_defContext s : ctx.fucd)
-// 			ps.add((String) visit(ctx.parms));
-// 		return new latches(ps);
-// 	}
-
-
-
-// 	public AST visitIdentifier(ccParser.IdentifierContext ctx){
-// 		return new Identifier((Exp) visit(ctx.e1));
-// 	}
+	public AST visitUpdate(ccParser.UpdateContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.UpdatesContext s : ctx.upd)
+			ps.add((String) visit(s));
+		return new latches(ps);
+	}
 
 
 
 
-// 	public AST visitAssign(ccParser.AssignContext ctx){
-// 		return new Assign((Exp) visit(ctx.e1));
-// 	}
 
-// 	public AST visitFunctionCall(ccParser.FunctionCallContext ctx){
-// 		return new FunctionCall((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
-// 	}
+	public AST visitFunc_def(ccParser.Func_defContext ctx){
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.Func_defContext s : ctx.fucd)
+			ps.add((String) visit(ctx.parms));
+		return new latches(ps);
+	}
 
-// 	public AST visitParen(ccParser.ParenContext ctx){
-// 		return new Assign((Exp) visit(ctx.e1));
-// 	}
+
+
+	public AST visitIdentifier(ccParser.IdentifierContext ctx){
+		return new Identifier((Exp) visit(ctx.e1));
+	}
+
+
+
+
+	public AST visitAssign(ccParser.AssignContext ctx){
+		return new Assign((Exp) visit(ctx.e1));
+	}
+
+	public AST visitFunctionCall(ccParser.FunctionCallContext ctx){
+		return new FunctionCall((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
+	}
+
+	public AST visitParen(ccParser.ParenContext ctx){
+		return new Assign((Exp) visit(ctx.e1));
+	}
 
 	
-// 	public AST visitOR(ccParser.ORContext ctx){
-// 		return new OR((Exp) visit(ctx.e1),(Exp) visit(ctx.e2));
+	public AST visitOR(ccParser.ORContext ctx){
+		return new OR((Exp) visit(ctx.e1),(Exp) visit(ctx.e2));
 		
-// 	}
+	}
 
-// 	public AST visitAND(ccParser.ANDContext ctx){
-// 		return new And((Exp) visit(ctx.e1),(Exp) visit(ctx.e2));
-// 	}
+	public AST visitAND(ccParser.ANDContext ctx){
+		return new And((Exp) visit(ctx.e1),(Exp) visit(ctx.e2));
+	}
 
-// 	public AST visitNOT(ccParser.NOTContext ctx){
-// 		return new Not((Exp) visit(ctx.e1));
-// 	}
+	public AST visitNOT(ccParser.NOTContext ctx){
+		return new Not((Exp) visit(ctx.e1));
+	}
 
 
-// }
+}
 
 
 // class Interpreter extends AbstractParseTreeVisitor<Double>
