@@ -46,7 +46,7 @@ siminputs : 'siminputs:' siminput+;
 class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 	public AST visitStart(ccParser.StartContext ctx){
 		List<String> ps = new ArrayList<String>();
-		ps.add((String) visit(ctx.start));
+		ps.add(visit(ctx.hardwar));
 		return new Start(ps.ToHTML());
 	};
 	
@@ -124,13 +124,16 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 
 
 	public AST visitFunc_def(ccParser.Func_defContext ctx){
-		return visit(ctx.c);
+		List<String> ps = new ArrayList<String>();
+		for (ccParser.Func_defContext s : ctx.fucd)
+			ps.add((String) visit(ctx.parms));
+		return new latches(ps);
 	}
 
 
 
 	public AST visitIdentifier(ccParser.IdentifierContext ctx){
-		return visit(ctx.c);
+		return new Identifier((Exp) visit(ctx.e1));
 	}
 
 

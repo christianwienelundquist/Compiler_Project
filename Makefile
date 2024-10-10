@@ -28,7 +28,8 @@ main.class: ccLexer.java main.java
 
 run:	main.class
 	java -cp $(classpath) main TestFiles/01-hello-world.hw
+	
 
 clean:
-	rm -f $(GENERATED) *.class *.interp *.tokens
+	rm -f $(GENERATED) *.class *.interp *.tokens 
 	clear
