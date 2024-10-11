@@ -9,24 +9,23 @@ import java.util.*;
 
 public class main {
     public static void main(String[] args) throws IOException{
+        // we expect exactly one argument: the name of the input file
+        if (args.length != 1) {
+            System.err.println("\n");
+            System.err.println("Please provide a filename as the input argument.\n");
+            System.exit(-1);
+        }
 
-	// we expect exactly one argument: the name of the input file
-	if (args.length!=1) {
-	    System.err.println("\n");
-	    System.err.println("Please give as input argument a filename\n");
-	    System.exit(-1);
-	}
-	String filename=args[0];
+        String filename = args[0];
+        CharStream input = CharStreams.fromFileName(filename);
+        ccLexer lexer = new ccLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        ccParser parser = new ccParser(tokens);
+        ParseTree parseTree = parser.start();
+        ASTMaker astMaker = new ASTMaker();
+        AST ast = astMaker.visit(parseTree);
 
-	CharStream input = CharStreams.fromFileName(filename);
-	ccLexer lex = new ccLexer(input);
-	CommonTokenStream tokens = new CommonTokenStream(lex);
-	ccParser parser = new ccParser(tokens);
-	ParseTree parseTree = parser.start();
-	ASTMaker astmaker = new ASTMaker();
-	HTMLElementsStringss p=(HTMLElementsStringss)astmaker.visit(parseTree);
-
-	System.out.println(p);
+        System.out.println(ast.ToHTML());
     }
 }
 
@@ -47,18 +46,26 @@ siminputs : 'siminputs:' siminput+;
 
 
 class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
-	public AST visitStart(ccParser.StartContext ctx){
-		List<String> ps = new ArrayList<String>();
-		ps.add(visit(ctx.hardwar));
-		return new Start(ps);
-	};
+public AST visitStart(ccParser.StartContext ctx) {
+    List<HTMLElementsStringss> ps = new ArrayList<>();
+
+    ps.add((HTMLElementsStringss) visit(ctx.hardware()));
+    ps.add((HTMLElementsStringss) visit(ctx.inputs()));
+    ps.add((HTMLElementsStringss) visit(ctx.outputs()));
+    ps.add((HTMLElementsStringss) visit(ctx.latches()));
+
+    return new Start(ps);
+}
+
+	
 	
 	public AST visitHardware(ccParser.HardwareContext ctx){
 		List<String> ps = new ArrayList<String>();
-		for (ccParser.HardwareContext s : ctx.hw)
+		for (Token s : ctx.hw)
 			ps.add((String) visit(s));
 		return new Hardware(ps);
 	};
+
 
 	public AST visitInputs(ccParser.InputsContext ctx){
 		List<String> ps = new ArrayList<String>();

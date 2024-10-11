@@ -13,16 +13,23 @@ abstract class HTMLElementsStringss extends AST{
 }
 
 
-class Start extends HTMLElementsStringss{
+class Start extends HTMLElementsStringss {
     List<HTMLElementsStringss> ps;
-    Start(List<HTMLElementsStringss> ps){this.ps=ps;}
-    public String ToHTML(){
-        String.builder sb = new StringBuilder();
-        for (HTMLElementsStringss p : ps){
-            sb.append(p.ToHTML());
+    Start(List<HTMLElementsStringss> ps) {
+        this.ps = ps;
+    }
+    @Override
+    public String ToHTML() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html>\n");
+        for (HTMLElementsStringss p : ps) {
+            sb.append(p.ToHTML()).append("\n");
         }
+        sb.append("</html>");
+        return sb.toString();
     }
 }
+
 
 
 class Hardware extends HTMLElementsStringss{
