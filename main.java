@@ -1,4 +1,3 @@
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.CharStreams;
@@ -51,8 +50,17 @@ public AST visitStart(ccParser.StartContext ctx) {
 
     ps.add((HTMLElementsStringss) visit(ctx.hardware()));
     ps.add((HTMLElementsStringss) visit(ctx.inputs()));
+	
     ps.add((HTMLElementsStringss) visit(ctx.outputs()));
     ps.add((HTMLElementsStringss) visit(ctx.latches()));
+
+	
+	ps.add((HTMLElementsStringss) visit(ctx.updates()));
+	ps.add((HTMLElementsStringss) visit(ctx.siminputs()));
+	// ps.add((HTMLElementsStringss) visit(ctx.EOF()));
+
+
+	// hardwar=hardware input=inputs output=outputs latche=latches definisio=def* updat=updates siminpu=siminputs EO=EOF;
 
     return new Start(ps);
 }

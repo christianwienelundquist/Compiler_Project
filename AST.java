@@ -21,11 +21,20 @@ class Start extends HTMLElementsStringss {
     @Override
     public String ToHTML() {
         StringBuilder sb = new StringBuilder();
-        sb.append("<html>\n");
+        sb.append("<!DOCTYPE html>" + 
+                        "<html><head><title>hej</title>" +
+                        "<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>" + 
+                        "<script type=\"text/javascript\" id=\"MathJax-script\"" + 
+                        "async" + 
+                        "src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js\">" +
+                        "</script></head><body>\n" 
+                        );
+
+        // sb.append("<html>\n");
         for (HTMLElementsStringss p : ps) {
             sb.append(p.ToHTML()).append("\n");
         }
-        sb.append("</html>");
+        sb.append("</body></html>");
         return sb.toString();
     }
 }
@@ -36,7 +45,9 @@ class Hardware extends HTMLElementsStringss{
     List<String> ps;
     Hardware(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        return String.join("\n",ps);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "<h1> " + ps.toString() + " </h1>");
+        return sb.toString();
     }
 }
 
@@ -45,7 +56,9 @@ class Input extends HTMLElementsStringss{
     List<String> ps;
     Input(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        return String.join("\n",ps);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "<h2> " + "Inputs" + " </h2>" +"\n"+ ps.toString());
+        return sb.toString();
     }
 }
 
@@ -53,7 +66,9 @@ class Output extends HTMLElementsStringss{
     List<String> ps;
     Output(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        return String.join("\n",ps);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "<h2> " + "Output" + " </h2>" +"\n"+ ps.toString());
+        return sb.toString();
     }
 }
 
@@ -61,7 +76,9 @@ class latches extends HTMLElementsStringss{
     List<String> ps;
     latches(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        return String.join("\n",ps);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "<h2> " + "Latches" + " </h2>" +"\n"+ ps.toString());
+        return sb.toString();
     }
 }
 
@@ -69,7 +86,9 @@ class Def extends HTMLElementsStringss{
     func_def df;
     Def(func_def df){this.df=df;}
     public String ToHTML(){
-        return df.ToHTML();
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "<h2> " + "Definitions " + " </h2>" +"\n"+ df.ToHTML());
+        return sb.toString();
     }
 }
 
@@ -77,7 +96,9 @@ class updates extends HTMLElementsStringss{
     List<String> ps;
     updates(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        return String.join("\n",ps);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "<h2> " + "Updates " + " </h2>" +"\n"+ ps.toString());
+        return sb.toString();
     }
 }
 
