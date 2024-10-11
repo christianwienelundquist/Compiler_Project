@@ -36,7 +36,7 @@ class Hardware extends HTMLElementsStringss{
     List<String> ps;
     Hardware(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        String.join("\n",ps);
+        return String.join("\n",ps);
     }
 }
 
@@ -45,7 +45,7 @@ class Input extends HTMLElementsStringss{
     List<String> ps;
     Input(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        String.join("\n",ps);
+        return String.join("\n",ps);
     }
 }
 
@@ -53,7 +53,7 @@ class Output extends HTMLElementsStringss{
     List<String> ps;
     Output(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        String.join("\n",ps);
+        return String.join("\n",ps);
     }
 }
 
@@ -61,15 +61,15 @@ class latches extends HTMLElementsStringss{
     List<String> ps;
     latches(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        String.join("\n",ps);
+        return String.join("\n",ps);
     }
 }
 
-class def extends HTMLElementsStringss{
-    List<String> ps;
-    def(List<String> ps){this.ps=ps;}
+class Def extends HTMLElementsStringss{
+    func_def df;
+    Def(func_def df){this.df=df;}
     public String ToHTML(){
-        String.join("\n",ps);
+        return df.ToHTML();
     }
 }
 
@@ -77,39 +77,48 @@ class updates extends HTMLElementsStringss{
     List<String> ps;
     updates(List<String> ps){this.ps=ps;}
     public String ToHTML(){
-        String.join("\n",ps);
+        return String.join("\n",ps);
     }
 }
 
 class siminputs extends HTMLElementsStringss{
-    List<String> ps;
-    siminputs(List<String> ps){this.ps=ps;}
+    List<siminput> simi;
+    siminputs(List<siminput> simi){this.simi=simi;}
     public String ToHTML(){
-        String.join("\n",ps);
+        StringBuilder sb = new StringBuilder();
+        for (siminput s : simi) {
+            sb.append(s.ToHTML()).append("\n");
+        }
+        return sb.toString();
     }
 }
 
 class update extends HTMLElementsStringss{
-    List<String> ps;
-    update(List<String> ps){this.ps=ps;}
+    String upda;
+    Exp e;
+    update(String upda, Exp e){this.upda=upda;this.e=e;} 
     public String ToHTML(){
-        String.join("\n",ps);
+        return String.format("%s: (%s)\n", upda, e.toLatex());
     }
 }
 
 class siminput extends HTMLElementsStringss{
-    List<String> ps;
-    siminput(List<String> ps){this.ps=ps;}
+    String simi;
+    String bir;
+    siminput(String simi, String bir){this.simi=simi; this.bir=bir;}
     public String ToHTML(){
-        String.join("\n",ps);
+        return String.join("\n",simi,bir);
     }
 }
 
 class func_def extends HTMLElementsStringss{
-    List<String> ps;
-    func_def(List<String> ps){this.ps=ps;}
+    String fucd;
+    List<String> parms;
+    Exp fucd4;
+
+    func_def(String fucd, List<String> parms, Exp fucd4){this.fucd=fucd;this.parms=parms;this.fucd4=fucd4;}
     public String ToHTML(){
-        String.join("\n",ps);
+        return String.format("(%s(%s) = %s)\n", fucd, String.join(", ", parms), fucd4.toLatex());
     }
 }
 
@@ -150,40 +159,37 @@ class Not extends Exp{
     } 
 }
 
-class Paren extends Exp{
-    Exp e1;
-    Paren(Exp e1){this.e1=e1;}
-    public String toLatex(){
-        return "("+ e1.toLatex() +")" ;
-    } 
-}
+// class Paren extends Exp{
+//     Exp e1;
+//     Paren(Exp e1){this.e1=e1;}
+//     public String toLatex(){
+//         return "("+ e1.toLatex() +")" ;
+//     } 
+// }
 
-class Assign extends Exp{
-    Exp e1;
-    Assign(Exp e1){this.e1=e1;}
-    public String toLatex(){
-        return "="+ e1.toLatex() ;
-    } 
-}
+// class Assign extends Exp{
+//     Exp e1;
+//     Assign(Exp e1){this.e1=e1;}
+//     public String toLatex(){
+//         return "="+ e1.toLatex() ;
+//     } 
+// }
 
 class FunctionCall extends Exp{
-    Exp e1;
-    List<String> ps;
-    FunctionCall(List<String> ps){this.ps=ps;}
-    public String ToHTML(){
-        String.join("\n",ps);
-    }
-    FunctionCall(Exp e1){this.e1=e1;}
+    String e1;
+    List<String> e2;
+
+    FunctionCall(String e1,List<String> e2 ){this.e1=e1;this.e2=e2;}
     public String toLatex(){
-        return "(" + e1.toLatex() +"(" + ps +", "+")" ;
+        return "(" + e1 +"(" + e2 +", "+")" ;
     } 
 }
 
 class Identifier extends Exp{
-    Exp e1;
-    Identifier(Exp e1){this.e1=e1;}
+    String e1;
+    Identifier(String e1){this.e1=e1;}
     public String toLatex(){
-        return "("+ e1.toLatex() +")" ;
+        return "("+ e1 +")" ;
     } 
 }
 

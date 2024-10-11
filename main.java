@@ -23,8 +23,8 @@ public class main {
         ccParser parser = new ccParser(tokens);
         ParseTree parseTree = parser.start();
         ASTMaker astMaker = new ASTMaker();
-        AST ast = astMaker.visit(parseTree);
-
+        Start ast = (Start)astMaker.visit(parseTree);
+		
         System.out.println(ast.ToHTML());
     }
 }
@@ -62,71 +62,58 @@ public AST visitStart(ccParser.StartContext ctx) {
 	public AST visitHardware(ccParser.HardwareContext ctx){
 		List<String> ps = new ArrayList<String>();
 		for (Token s : ctx.hw)
-			ps.add((String) visit(s));
+			ps.add(s.getText());
 		return new Hardware(ps);
 	};
 
 
 	public AST visitInputs(ccParser.InputsContext ctx){
 		List<String> ps = new ArrayList<String>();
-		for (ccParser.InputsContext s : ctx.inp)
-			ps.add((String) visit(s));
+		for (Token s : ctx.inp)
+			ps.add(s.getText());
 		return new Input(ps);
 	} 
 
 	public AST visitOutputs(ccParser.OutputsContext ctx){
 		List<String> ps = new ArrayList<String>();
-		for (ccParser.OutputsContext s : ctx.otp)
-			ps.add((String) visit(s));
+		for (Token s : ctx.otp)
+			ps.add(s.getText());
 		return new Output(ps);
 	}
 
 	public AST visitLatches(ccParser.LatchesContext ctx){
 		List<String> ps = new ArrayList<String>();
-		for (ccParser.LatchesContext s : ctx.lhes)
-			ps.add((String) visit(s));
+		for (Token s : ctx.lhes)
+			ps.add(s.getText());
 		return new latches(ps);
 	}
 
 	public AST visitDef(ccParser.DefContext ctx){
-		List<String> ps = new ArrayList<String>();
-		for (ccParser.DefContext s : ctx.df)
-			ps.add((String) visit(s));
-		return new latches(ps);
-		// return visit(ctx.df);
+		return new Def((func_def) visit(ctx.df));
 	}
 
 	public AST visitUpdates(ccParser.UpdatesContext ctx){
 		List<String> ps = new ArrayList<String>();
-		for (ccParser.UpdatesContext s : ctx.upd)
-			ps.add((String) visit(s));
-		return new latches(ps);
+		for (ccParser.UpdateContext s : ctx.upd)
+			ps.add(s.getText());
+		return new updates(ps);
 	}
 
 	public AST visitSiminputs(ccParser.SiminputsContext ctx){
-		List<String> ps = new ArrayList<String>();
-		for (ccParser.SiminputsContext s : ctx.simip)
-			ps.add((String) visit(s));
-		return new latches(ps);
+		List<siminput> ps = new ArrayList<siminput>();
+		
+		for (ccParser.SiminputContext s : ctx.simip)
+			ps.add((siminput)visit(s));
+		return new siminputs(ps);
 		// return visit(ctx.simip);
 	}
 
-		public AST visitSiminput(ccParser.SiminputContext ctx){
-		List<String> ps = new ArrayList<String>();
-		for (ccParser.SiminputContext s : ctx.simip)
-			ps.add((String) visit(s));
-
-		for (ccParser.SiminputContext s : ctx.bir)
-			ps.add((String) visit(s));
-		return new latches(ps);
-		// return visit(ctx.simip);
+	public AST visitSiminput(ccParser.SiminputContext ctx){
+		return new siminput(ctx.simi.getText(), ctx.bir.getText());
 	}
 
 	public AST visitUpdate(ccParser.UpdateContext ctx){
-		List<String> ps = new ArrayList<String>();
-		for (ccParser.UpdatesContext s : ctx.upd)
-			ps.add((String) visit(s));
-		return new latches(ps);
+		return new update(ctx.upda.getText(), (Exp)visit(ctx.e));
 	}
 
 
@@ -134,31 +121,38 @@ public AST visitStart(ccParser.StartContext ctx) {
 
 
 	public AST visitFunc_def(ccParser.Func_defContext ctx){
-		List<String> ps = new ArrayList<String>();
-		for (ccParser.Func_defContext s : ctx.fucd)
-			ps.add((String) visit(ctx.parms));
-		return new latches(ps);
+		List<String> parms = new ArrayList<String>();
+		String fucd;
+    	Exp fucd4;
+
+		for (Token s : ctx.parms)
+			parms.add(s.getText());
+		return new func_def(ctx.fucd.getText(), parms, (Exp) visit(ctx.fucd4));
 	}
 
 
 
 	public AST visitIdentifier(ccParser.IdentifierContext ctx){
-		return new Identifier((Exp) visit(ctx.e1));
+		return new Identifier(ctx.e1.getText());
 	}
 
 
 
 
-	public AST visitAssign(ccParser.AssignContext ctx){
-		return new Assign((Exp) visit(ctx.e1));
-	}
+	// public AST visitAssign(ccParser.AssignContext ctx){
+	// 	return new Assign((Exp) visit(ctx.e1));
+	// }
 
 	public AST visitFunctionCall(ccParser.FunctionCallContext ctx){
-		return new FunctionCall((Exp) visit(ctx.e1), (Exp) visit(ctx.e2));
+		List<String> e2 = new ArrayList<String>();
+		for (ccParser.ExpContext s : ctx.e2)
+			e2.add(s.getText());
+
+		return new FunctionCall(ctx.e1.getText(), e2);
 	}
 
 	public AST visitParen(ccParser.ParenContext ctx){
-		return new Assign((Exp) visit(ctx.e1));
+		return visit(ctx.e1);
 	}
 
 	
