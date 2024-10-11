@@ -22,7 +22,7 @@ class Start extends HTMLElementsStringss {
     public String ToHTML() {
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html>" + 
-                        "<html><head><title>hej</title>" +
+                        "<html><head><title>Testing</title>" +
                         "<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>" + 
                         "<script type=\"text/javascript\" id=\"MathJax-script\"" + 
                         "async" + 
@@ -107,8 +107,9 @@ class siminputs extends HTMLElementsStringss{
     siminputs(List<siminput> simi){this.simi=simi;}
     public String ToHTML(){
         StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "<h2> " + "Simulation Inputs " + " </h2>");
         for (siminput s : simi) {
-            sb.append(s.ToHTML()).append("\n");
+            sb.append(s.ToHTML());
         }
         return sb.toString();
     }
@@ -119,7 +120,7 @@ class update extends HTMLElementsStringss{
     Exp e;
     update(String upda, Exp e){this.upda=upda;this.e=e;} 
     public String ToHTML(){
-        return String.format("%s: (%s)\n", upda, e.toLatex());
+        return String.format("%s: \n", upda, e.toLatex());
     }
 }
 
@@ -128,7 +129,11 @@ class siminput extends HTMLElementsStringss{
     String bir;
     siminput(String simi, String bir){this.simi=simi; this.bir=bir;}
     public String ToHTML(){
-        return String.join("\n",simi,bir);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "<b> " + simi + " </b>" +" "+ bir + "<br>");
+        return sb.toString();
+
+        // return String.join(" ",simi,bir);
     }
 }
 
@@ -139,17 +144,10 @@ class func_def extends HTMLElementsStringss{
 
     func_def(String fucd, List<String> parms, Exp fucd4){this.fucd=fucd;this.parms=parms;this.fucd4=fucd4;}
     public String ToHTML(){
-        return String.format("(%s(%s) = %s)\n", fucd, String.join(", ", parms), fucd4.toLatex());
+        // return "Hej";
+        return String.format("%s(%s) = (\\(%s)\\n", fucd, String.join(", ", parms), fucd4.toLatex());
     }
 }
-
-
-
-
-
-
-
-
 
 
 abstract class Exp extends AST{
@@ -160,7 +158,7 @@ class OR extends Exp{
     Exp e1, e2;
     OR(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}  
     public String toLatex(){
-        return "("+ e1.toLatex() + " \\vee "+ e2.toLatex() +")" ;
+        return e1.toLatex() + " \\vee "+ e2.toLatex() ;
     }  
 }
 
@@ -168,7 +166,7 @@ class And extends Exp{
     Exp e1, e2;
     And(Exp e1, Exp e2){this.e1=e1; this.e2=e2;}
     public String toLatex(){
-        return "("+ e1.toLatex() + " \\wedge "+ e2.toLatex() +")" ;
+        return e1.toLatex() + " \\wedge "+ e2.toLatex()  ;
     } 
 }
 
@@ -176,7 +174,7 @@ class Not extends Exp{
     Exp e1;
     Not(Exp e1){this.e1=e1;}
     public String toLatex(){
-        return "(\\neg"+ e1.toLatex() +")" ;
+        return "\\neg("+ e1.toLatex() + ")" ;
     } 
 }
 
@@ -202,7 +200,7 @@ class FunctionCall extends Exp{
 
     FunctionCall(String e1,List<String> e2 ){this.e1=e1;this.e2=e2;}
     public String toLatex(){
-        return "(" + e1 +"(" + e2 +", "+")" ;
+        return  e1 +"(" + e2 +", " ;
     } 
 }
 
@@ -210,7 +208,7 @@ class Identifier extends Exp{
     String e1;
     Identifier(String e1){this.e1=e1;}
     public String toLatex(){
-        return "("+ e1 +")" ;
+        return  e1 ;
     } 
 }
 

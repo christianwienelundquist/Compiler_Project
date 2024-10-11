@@ -48,15 +48,17 @@ class ASTMaker extends AbstractParseTreeVisitor<AST> implements ccVisitor<AST> {
 public AST visitStart(ccParser.StartContext ctx) {
     List<HTMLElementsStringss> ps = new ArrayList<>();
 
-    ps.add((HTMLElementsStringss) visit(ctx.hardware()));
-    ps.add((HTMLElementsStringss) visit(ctx.inputs()));
+    ps.add((HTMLElementsStringss) visitHardware(ctx.hardwar));
+    ps.add((HTMLElementsStringss) visitInputs(ctx.input));
 	
-    ps.add((HTMLElementsStringss) visit(ctx.outputs()));
-    ps.add((HTMLElementsStringss) visit(ctx.latches()));
+    ps.add((HTMLElementsStringss) visitOutputs(ctx.output));
+    ps.add((HTMLElementsStringss) visitLatches(ctx.latche));
 
+	if(ctx.definisio != null)
+		ps.add((HTMLElementsStringss) visitDef(ctx.definisio));
 	
-	ps.add((HTMLElementsStringss) visit(ctx.updates()));
-	ps.add((HTMLElementsStringss) visit(ctx.siminputs()));
+	ps.add((HTMLElementsStringss) visitUpdates(ctx.updat));
+	ps.add((HTMLElementsStringss) visitSiminputs(ctx.siminpu));
 	// ps.add((HTMLElementsStringss) visit(ctx.EOF()));
 
 
@@ -97,7 +99,7 @@ public AST visitStart(ccParser.StartContext ctx) {
 	}
 
 	public AST visitDef(ccParser.DefContext ctx){
-		return new Def((func_def) visit(ctx.df));
+		return new Def((func_def) visit(ctx.df)) ;
 	}
 
 	public AST visitUpdates(ccParser.UpdatesContext ctx){
@@ -121,7 +123,7 @@ public AST visitStart(ccParser.StartContext ctx) {
 	}
 
 	public AST visitUpdate(ccParser.UpdateContext ctx){
-		return new update(ctx.upda.getText(), (Exp)visit(ctx.e));
+		return new update(ctx.upda.getText(), (Exp) visit(ctx.e));
 	}
 
 
@@ -159,9 +161,9 @@ public AST visitStart(ccParser.StartContext ctx) {
 		return new FunctionCall(ctx.e1.getText(), e2);
 	}
 
-	public AST visitParen(ccParser.ParenContext ctx){
-		return visit(ctx.e1);
-	}
+	// public AST visitParen(ccParser.ParenContext ctx){
+	// 	return visit(ctx.e1);
+	// }
 
 	
 	public AST visitOR(ccParser.ORContext ctx){

@@ -24,7 +24,7 @@ func_def : fucd=IDENTIFIER '(' parms+=IDENTIFIER (',' parms+=IDENTIFIER)* ')' '=
 exp : '/' e1=exp           #NOT           // Logical OR expression
     | e1=exp '*'? e2=exp    #AND                           // Logical AND expression
     | e1=exp '+' e2=exp    #OR                          // Logical NOT expression
-    | '(' e1=exp ')'                                   #Paren      // Parenthesized expression
+    // | '(' e1=exp ')'                                   #Paren      // Parenthesized expression
     // | '=' e1=exp                                       #Assign     // Assignment expression
     | e1=IDENTIFIER '(' (e2+=exp (',' e2+=exp)*)? ')'          #FunctionCall // Function call
     | e1=IDENTIFIER                                    #Identifier  // Atomic identifier   
