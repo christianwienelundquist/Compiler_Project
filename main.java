@@ -54,8 +54,9 @@ public AST visitStart(ccParser.StartContext ctx) {
     ps.add((HTMLElementsStringss) visitOutputs(ctx.output));
     ps.add((HTMLElementsStringss) visitLatches(ctx.latche));
 
-	if(ctx.definisio != null)
-		ps.add((HTMLElementsStringss) visitDef(ctx.definisio));
+	for(ccParser.DefContext s : ctx.definisio){
+		ps.add((HTMLElementsStringss) (visitDef(s)));
+	}
 	
 	ps.add((HTMLElementsStringss) visitUpdates(ctx.updat));
 	ps.add((HTMLElementsStringss) visitSiminputs(ctx.siminpu));
@@ -103,9 +104,9 @@ public AST visitStart(ccParser.StartContext ctx) {
 	}
 
 	public AST visitUpdates(ccParser.UpdatesContext ctx){
-		List<String> ps = new ArrayList<String>();
+		List<update> ps = new ArrayList<update>();
 		for (ccParser.UpdateContext s : ctx.upd)
-			ps.add(s.getText());
+			ps.add((update) visit(s));
 		return new updates(ps);
 	}
 

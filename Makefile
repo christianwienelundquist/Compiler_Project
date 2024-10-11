@@ -27,7 +27,7 @@ main.class: ccLexer.java main.java
 	javac -cp $(classpath) $(GENERATED) $(SRCFILES)
 
 run:	main.class
-	java -cp $(classpath) main TestFiles/01b-hello-world-withdef.hw
+	java -cp $(classpath) main TestFiles/04-von-Neumann.hw
 	
 
 clean:

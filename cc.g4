@@ -1,7 +1,7 @@
 grammar cc;
 
 // Main grammar structure
-start   : hardwar=hardware input=inputs output=outputs latche=latches definisio=def* updat=updates siminpu=siminputs EO=EOF;
+start   : hardwar=hardware input=inputs output=outputs latche=latches definisio+=def* updat=updates siminpu=siminputs EO=EOF;
 
 
 //if things is capital letter, it is a token
